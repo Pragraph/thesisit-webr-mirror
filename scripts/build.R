@@ -29,6 +29,17 @@ refs <- vapply(seq_len(nrow(pinned)), function(i) {
   paste0("local::", normalizePath(list.dirs(into, recursive = FALSE)[1]))
 }, character(1))
 
+# One build adjustment, recorded in the manifest. rwasm's override for
+# quadprog adds $(SAFE_FFLAGS), which in this toolchain expands to the host's
+# x86 flags (-msse2 -mfpmath=sse), and flang refuses them. Without it,
+# quadprog's Fortran compiles as every other package's does here.
+quadprog_mk <- system.file("Makevars", "quadprog.mk", package = "rwasm")
+if (nzchar(quadprog_mk)) writeLines("PKG_LIBS = $(BLAS_LIBS)", quadprog_mk)
+
+# System requirements are a host concern (a clipboard library for clipr),
+# never part of a WebAssembly binary, so pak does not install them here:
+# the workflow sets PKG_SYSREQS=false.
+
 # remotes = NULL: no substitution. The two webR forks are pinned above by
 # commit, so rwasm must not swap in its own moving branches.
 rwasm::add_pkg(refs, repo_dir = "repo", remotes = NULL, dependencies = FALSE, compress = TRUE)

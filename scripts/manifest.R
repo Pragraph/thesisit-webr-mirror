@@ -67,7 +67,11 @@ build <- list(
   built_at = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
   commit = env("GITHUB_SHA"),
   run = if (!is.null(env("GITHUB_RUN_ID"))) sprintf("%s/%s/actions/runs/%s", Sys.getenv("GITHUB_SERVER_URL"), Sys.getenv("GITHUB_REPOSITORY"), Sys.getenv("GITHUB_RUN_ID")) else NULL,
-  host_build_dependencies = "rwasm installs each package's build-time dependencies into the container's native R from CRAN, as R CMD INSTALL needs them; they are not part of any WebAssembly output."
+  host_build_dependencies = "rwasm installs each package's build-time dependencies into the container's native R from CRAN, as R CMD INSTALL needs them; they are not part of any WebAssembly output.",
+  adjustments = list(
+    "quadprog: rwasm's Makevars override replaced by PKG_LIBS = $(BLAS_LIBS), because its $(SAFE_FFLAGS) expands to host x86 flags that flang refuses (scripts/build.R).",
+    "System requirements are not installed (PKG_SYSREQS=false): they serve the host's native R, never a WebAssembly binary."
+  )
 )
 
 packages <- lapply(seq_len(nrow(pinned)), function(i) {

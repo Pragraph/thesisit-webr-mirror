@@ -31,6 +31,11 @@ jobs:
     timeout-minutes: 240
     permissions:
       contents: read
+    defaults:
+      run:
+        # Explicit, so every step runs with -eo pipefail and a failed build
+        # cannot hide behind tee.
+        shell: bash
     steps:
       - name: Check the tag's form
         run: |
@@ -50,6 +55,7 @@ jobs:
           docker run --rm \
             -v "$GITHUB_WORKSPACE:/work" -w /work \
             -e MIRROR_IMAGE -e GITHUB_SHA -e GITHUB_SERVER_URL -e GITHUB_REPOSITORY -e GITHUB_RUN_ID \
+            -e PKG_SYSREQS=false \
             "$MIRROR_IMAGE" \
             bash -lc 'set -euo pipefail; Rscript scripts/fetch-sources.R && Rscript scripts/build.R && Rscript scripts/manifest.R "$0"' "$TAG" \
             2>&1 | tee logs/build-log.txt
@@ -77,6 +83,9 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: write
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Fetch the release files
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
