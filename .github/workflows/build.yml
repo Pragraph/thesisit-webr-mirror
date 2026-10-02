@@ -1,0 +1,96 @@
+name: Build a draft release
+
+# Builds every pinned package for webR 0.6.0 (R 4.6.0) inside webR's own
+# toolchain image, pinned by digest, and attaches the images, binaries,
+# exact sources, licences and records to a DRAFT release. A maintainer
+# verifies the draft before publishing it; published releases are immutable.
+#
+# The build job compiles third-party code, so it gets read access only and
+# no token reaches its container. The release job holds the write permission
+# and runs nothing but the GitHub CLI on the build's artifact.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag, for example r4.6.0-webr0.6.0-1"
+        required: true
+        type: string
+
+concurrency:
+  group: mirror-build
+  cancel-in-progress: false
+
+env:
+  TAG: ${{ inputs.tag }}
+  MIRROR_IMAGE: ghcr.io/r-wasm/webr@sha256:3fbf3dc3537c5b31bca94dd797dc25364693b18d71b1d0975f318fbfd6269d86
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    permissions:
+      contents: read
+    steps:
+      - name: Check the tag's form
+        run: |
+          [[ "$TAG" =~ ^r[0-9]+\.[0-9]+\.[0-9]+-webr[0-9]+\.[0-9]+\.[0-9]+-[0-9]+$ ]] || { echo "tag must look like r4.6.0-webr0.6.0-1"; exit 1; }
+
+      - name: Check out
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Pull the webR toolchain
+        run: docker pull "$MIRROR_IMAGE"
+
+      - name: Fetch sources, build and record
+        run: |
+          mkdir -p logs
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/work" -w /work \
+            -e MIRROR_IMAGE -e GITHUB_SHA -e GITHUB_SERVER_URL -e GITHUB_REPOSITORY -e GITHUB_RUN_ID \
+            "$MIRROR_IMAGE" \
+            bash -lc 'set -euo pipefail; Rscript scripts/fetch-sources.R && Rscript scripts/build.R && Rscript scripts/manifest.R "$0"' "$TAG" \
+            2>&1 | tee logs/build-log.txt
+
+      - name: Checksums
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" dist logs
+          cp logs/build-log.txt dist/build-log.txt
+          cd dist
+          sha256sum -- * | sort -k2 > ../SHA256SUMS
+          mv ../SHA256SUMS SHA256SUMS
+          echo "$(wc -l < SHA256SUMS) files, $(du -sh . | cut -f1)"
+
+      - name: Keep the release files
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-files
+          path: dist/
+          retention-days: 3
+          if-no-files-found: error
+
+  draft:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - name: Fetch the release files
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-files
+          path: dist
+
+      - name: Check the files against their checksums
+        run: cd dist && sha256sum --check --strict SHA256SUMS
+
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then echo "release $TAG exists already"; exit 1; fi
+          gh release create "$TAG" dist/* --draft --target "$GITHUB_SHA" --title "$TAG" --notes-file dist/RELEASE_NOTES.md

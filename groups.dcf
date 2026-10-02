@@ -1,0 +1,15 @@
+Group: psych
+Purpose: Exploratory factor analysis and omega reliability (psych, GPArotation).
+Roots: psych, GPArotation
+
+Group: lavaan
+Purpose: Confirmatory factor analysis, mediation and moderation (lavaan).
+Roots: lavaan
+
+Group: plspm
+Purpose: Partial least squares structural equation modelling (plspm).
+Roots: plspm
+
+Group: haven
+Purpose: Reading SPSS .sav files (haven).
+Roots: haven

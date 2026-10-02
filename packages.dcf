@@ -1,0 +1,211 @@
+Package: amap
+Version: 0.8-20
+Source: cran
+License: GPL
+
+Package: bit
+Version: 4.6.0
+Source: cran
+License: GPL-2 | GPL-3
+
+Package: bit64
+Version: 4.8.6
+Source: cran
+License: GPL-2 | GPL-3
+
+Package: cli
+Version: 3.6.6
+Source: cran
+License: MIT + file LICENSE
+
+Package: clipr
+Version: 0.8.1
+Source: cran
+License: GPL-3
+
+Package: cpp11
+Version: 0.5.5
+Source: cran
+License: MIT + file LICENSE
+
+Package: crayon
+Version: 1.5.3
+Source: cran
+License: MIT + file LICENSE
+
+Package: diagram
+Version: 1.6.5
+Source: cran
+License: GPL (>= 2)
+
+Package: forcats
+Version: 1.0.1
+Source: cran
+License: MIT + file LICENSE
+
+Package: glue
+Version: 1.8.1
+Source: cran
+License: MIT + file LICENSE
+
+Package: GPArotation
+Version: 2026.8-2
+Source: cran
+License: GPL (>= 2)
+
+Package: haven
+Version: 2.5.5
+Source: cran
+License: MIT + file LICENSE
+
+Package: hms
+Version: 1.1.4
+Source: cran
+License: MIT + file LICENSE
+
+Package: lattice
+Version: 0.23-1
+Source: cran
+License: GPL (>= 2)
+
+Package: lavaan
+Version: 0.7-2
+Source: cran
+License: GPL (>= 2)
+
+Package: lifecycle
+Version: 1.0.5
+Source: cran
+License: MIT + file LICENSE
+
+Package: magrittr
+Version: 2.0.5
+Source: cran
+License: MIT + file LICENSE
+
+Package: MASS
+Version: 7.3-66
+Source: cran
+License: GPL-2 | GPL-3
+
+Package: mnormt
+Version: 2.1.1
+Source: github::r-wasm/mnormt@fe84b88defa75c39c2408e6a4215169eb7ea0548
+License: GPL-2 | GPL-3
+Note: cran/mnormt with webR's patch: tvpack.f rewritten as a Fortran module, because LLVM flang cannot compile COMMON blocks for Wasm.
+
+Package: nlme
+Version: 3.1-171
+Source: cran
+License: GPL (>= 2)
+
+Package: numDeriv
+Version: 2016.8-1.1
+Source: cran
+License: GPL-2
+
+Package: pbivnorm
+Version: 0.6.0
+Source: cran
+License: GPL (>= 2)
+
+Package: pillar
+Version: 1.11.1
+Source: cran
+License: MIT + file LICENSE
+
+Package: pkgconfig
+Version: 2.0.3
+Source: cran
+License: MIT + file LICENSE
+
+Package: plspm
+Version: 0.6.0
+Source: cran
+License: GPL-3
+
+Package: prettyunits
+Version: 1.2.0
+Source: cran
+License: MIT + file LICENSE
+
+Package: progress
+Version: 1.2.3
+Source: cran
+License: MIT + file LICENSE
+
+Package: psych
+Version: 2.6.9
+Source: cran
+License: GPL (>= 2)
+
+Package: quadprog
+Version: 1.5-8
+Source: cran
+License: GPL (>= 2)
+
+Package: R6
+Version: 2.6.1
+Source: cran
+License: MIT + file LICENSE
+
+Package: readr
+Version: 2.2.0
+Source: cran
+License: MIT + file LICENSE
+
+Package: rlang
+Version: 1.3.0
+Source: cran
+License: MIT + file LICENSE
+
+Package: shape
+Version: 1.4.6.1
+Source: cran
+License: GPL (>= 3)
+
+Package: tester
+Version: 0.3.0
+Source: cran
+License: GPL-3
+
+Package: tibble
+Version: 3.3.1
+Source: cran
+License: MIT + file LICENSE
+
+Package: tidyselect
+Version: 1.2.1
+Source: cran
+License: MIT + file LICENSE
+
+Package: turner
+Version: 0.2.0
+Source: cran
+License: GPL-3
+
+Package: tzdb
+Version: 0.5.0
+Source: cran
+License: MIT + file LICENSE
+
+Package: utf8
+Version: 1.2.6
+Source: cran
+License: Apache License (== 2.0) | file LICENSE
+
+Package: vctrs
+Version: 0.7.3
+Source: cran
+License: MIT + file LICENSE
+
+Package: vroom
+Version: 1.7.1.9000
+Source: github::r-wasm/vroom@d0640b28f49e44bd70523ec035e549e69d3d8067
+License: MIT + file LICENSE
+Note: tidyverse/vroom with webR's patch: std::async forced to its deferred policy, because webR has no threads.
+
+Package: withr
+Version: 3.0.3
+Source: cran
+License: MIT + file LICENSE
