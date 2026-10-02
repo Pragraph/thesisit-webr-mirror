@@ -56,11 +56,9 @@ old <- setwd("build")
 utils::tar(file.path("..", "dist", "licenses.tar.gz"), files = "licenses", compression = "gzip", tar = "internal")
 setwd(old)
 
-webr_version <- tryCatch(as.character(getOption("rwasm.webr_version")), error = function(e) NA_character_)
 emcc <- tryCatch(system2("emcc", "--version", stdout = TRUE)[1], error = function(e) NA_character_)
 build <- list(
   image = env("MIRROR_IMAGE"),
-  webr_r_version = webr_version,
   host_r = R.version.string,
   rwasm = as.character(packageVersion("rwasm")),
   emscripten = emcc,

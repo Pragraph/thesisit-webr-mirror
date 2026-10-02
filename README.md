@@ -42,6 +42,14 @@ Thesis-It runs statistics in the student's browser, inside a sandbox that never 
 
 A maintainer then downloads the draft and verifies each checksum, loads each image in webR 0.6.0 with a representative analysis, and publishes. This repository has release immutability on, so a published release's files and tag can never change. Releases are never deleted; a rebuild gets a new tag.
 
+## Releases
+
+| Tag | Published | For | Images | Checked before publishing |
+| --- | --- | --- | --- | --- |
+| [`r4.6.0-webr0.6.0-1`](https://github.com/Pragraph/thesisit-webr-mirror/releases/tag/r4.6.0-webr0.6.0-1) | 2 October 2026, 13:26 UTC, immutable | webR 0.6.0, R 4.6.0 | `psych` 1.9 MB, `lavaan` 2.1 MB, `plspm` 0.3 MB, `haven` 3.9 MB | All 97 checksums matched. Each group's representative analysis in webR agreed with native R 4.6.0 (largest relative difference 1.9e-14). Nothing secret found in the files. After publishing, all 97 files downloaded without signing in and matched again. |
+
+In `r4.6.0-webr0.6.0-1`, the manifest's `build.webr_r_version` is an empty list. The release's versions are in `runtime` and `build.host_r`, and later releases leave that field out.
+
 ## Verifying a release yourself
 
 ```sh
@@ -54,7 +62,9 @@ Anyone can download the files without signing in, from `https://github.com/Pragr
 
 ## Licences
 
-Each package keeps its own licence. Its unchanged source is attached to the same release, and `licenses.tar.gz` carries its licence files. The licences are listed per package in `manifest.json` and in each release's notes. They are GPL-2 or GPL-3 in their R forms, MIT and Apache-2.0.
+Each package keeps its own licence. Its unchanged source is attached to the same release, and `licenses.tar.gz` carries its licence files. The licences are listed per package in `manifest.json` and in each release's notes.
+
+In `r4.6.0-webr0.6.0-1` they are: MIT (22 packages), GPL (>= 2) (8), GPL-2 | GPL-3 (4), GPL-3 (4), GPL (1), GPL (>= 3) (1), Apache-2.0 (1), and GPL-2 alone for numDeriv. numDeriv is plain R code with nothing compiled. Thesis-It admits licences by exact string under its own rule (its ADR-071).
 
 This repository's own files are MIT-licensed (`LICENSE`): the scripts, the workflow and this documentation.
 
